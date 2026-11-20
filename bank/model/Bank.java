@@ -6,13 +6,8 @@ import java.util.List;
 // Holds the bank's customers and accounts (core model, no GUI). //
 public class Bank {
 
-   private int customerCounter = 1000;
    private final List<Customer> customers = new ArrayList<>();
    private final List<Account> accounts = new ArrayList<>();
-
-   public String nextCustomerId() {
-      return "CU" + (++customerCounter);
-   }
 
    public void addCustomer(Customer customer) {
       if (customer == null) {
@@ -28,6 +23,16 @@ public class Bank {
       accounts.add(account);
    }
 
+   // Used by the login: returns null if no customer has that email. //
+   public Customer findCustomerByEmail(String email) {
+      for (Customer c : customers) {
+         if (c.getEmail().equalsIgnoreCase(email)) {
+            return c;
+         }
+      }
+      return null;
+   }
+
    public List<Customer> getCustomers() {
       return new ArrayList<>(customers);
    }
@@ -36,3 +41,4 @@ public class Bank {
       return new ArrayList<>(accounts);
    }
 }
+
