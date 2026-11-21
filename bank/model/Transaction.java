@@ -5,31 +5,37 @@ import java.time.format.DateTimeFormatter;
 /** One line on an account statement. */
 public class Transaction {
    private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-   private final LocalDateTime time = LocalDateTime.now();
+   private final LocalDateTime time;
    private final String type;
    private final double amount;
    private final double balanceAfter;
 
    public Transaction(String type, double amount, double balanceAfter) {
+      this(LocalDateTime.now(), type, amount, balanceAfter);
+   }
+
+   // Used when loading a saved transaction from the database. //
+   public Transaction(LocalDateTime time, String type, double amount, double balanceAfter) {
+      this.time = time;
       this.type = type;
       this.amount = amount;
       this.balanceAfter = balanceAfter;
    }
 
    public LocalDateTime getTime() {
-      return time; 
+      return time;
    }
-    
+
    public String getType() {
-      return type; 
+      return type;
    }
-    
-   public double getAmount() { 
+
+   public double getAmount() {
       return amount;
    }
-    
+
    public double getBalanceAfter() {
-      return balanceAfter; 
+      return balanceAfter;
    }
 
    public String getDetails() {

@@ -23,4 +23,16 @@ public class SavingsAccount extends Account implements InterestCalculation {
       double interest = calculateInterest();
       if (interest > 0) deposit(interest, "Interest");
    }
+
+   // Used when loading from the database: keeps the saved number, balance and status. //
+   public SavingsAccount(Customer customer, String branch, String accountNumber,
+                         double balance, Status status) {
+      super(customer, branch, accountNumber, balance, status);
+   }
+
+   public double getInterestRate() {
+      return interestRate;
+   }
+
 }
+

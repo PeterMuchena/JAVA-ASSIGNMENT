@@ -21,6 +21,27 @@ public abstract class Customer {
       this.password = password;
    }
 
+      // Used when loading a customer from the database: keeps the saved ID. //
+   protected Customer(String customerId, String address, String phoneNumber, String email, String password) {
+      this.customerId = customerId;
+      this.address = address;
+      this.phoneNumber = phoneNumber;
+      this.email = email;
+      this.password = password;
+      try {
+         int n = Integer.parseInt(customerId.substring(1));
+         if (n > counter) counter = n;
+      } 
+      catch (NumberFormatException e) {
+         // not a generated ID, ignore //
+      }
+   }
+
+   // Needed by the database layer to save the password. //
+   public String getPassword() {
+      return password;
+   }
+
    public abstract String getCustomerType();
    
    public abstract String getDisplayName();// firstname + surname, or company name

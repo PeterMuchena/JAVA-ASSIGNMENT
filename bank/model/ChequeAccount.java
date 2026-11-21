@@ -13,6 +13,14 @@ public class ChequeAccount extends Account implements WithdrawFunction {
       if (openingDeposit > 0) deposit(openingDeposit, "Opening deposit");
    }
 
+   // Used when loading from the database: keeps the saved number, balance and status. //
+   public ChequeAccount(Customer customer, String branch, String accountNumber, double balance,
+                        Status status, String companyName, String companyAddress) {
+      super(customer, branch, accountNumber, balance, status);
+      this.companyName = companyName;
+      this.companyAddress = companyAddress == null ? "" : companyAddress;
+   }
+
    @Override public String getAccountType() { 
       return "Cheque"; }
 

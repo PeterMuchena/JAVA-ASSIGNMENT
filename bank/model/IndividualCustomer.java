@@ -20,15 +20,47 @@ public class IndividualCustomer extends Customer {
       this.employed = employed;
    }
 
-   @Override public String getCustomerType() { 
-      return "Individual"; 
+   // Used when loading from the database: keeps the saved customer ID. //
+   public IndividualCustomer(String customerId, String firstname, String surname, String nationalID,
+                             Date dateOfBirth, String address, String phoneNumber, String email,
+                             String password, boolean employed) {
+      super(customerId, address, phoneNumber, email, password);
+      this.firstname = firstname;
+      this.surname = surname;
+      this.nationalID = nationalID;
+      this.dateOfBirth = dateOfBirth;
+      this.employed = employed;
    }
-   
+
+   @Override public String getCustomerType() {
+      return "Individual";
+   }
+
    @Override public String getDisplayName() {
-      return (firstname + " " + surname).trim(); 
+      return (firstname + " " + surname).trim();
    }
-    
+
    @Override public boolean isEligibleForCheque() {
+      return employed;
+   }
+
+   public String getFirstname() {
+      return firstname;
+   }
+
+   public String getSurname() {
+      return surname;
+   }
+
+   public String getNationalID() {
+      return nationalID;
+   }
+
+   public Date getDateOfBirth() {
+      return dateOfBirth;
+   }
+
+   public boolean isEmployed() {
       return employed;
    }
 

@@ -26,6 +26,28 @@ public abstract class Account {
       this.accountNumber = "AC" + (++counter);
    }
 
+      // Used when loading an account from the database: keeps its saved number, balance and status. //
+   protected Account(Customer customer, String branch, String accountNumber, double balance, Status status) {
+      this.customer = customer;
+      this.branch = branch;
+      this.accountNumber = accountNumber;
+      this.balance = balance;
+      this.status = status;
+      try {
+         int n = Integer.parseInt(accountNumber.substring(2));
+         if (n > counter) counter = n;
+      } 
+      
+      catch (NumberFormatException e) {
+         // not a generated number, ignore //
+      }
+   }
+
+   // Used when loading: puts a saved transaction back without changing the balance. //
+   public void restoreTransaction(Transaction t) {
+      transactions.add(t);
+   }
+
    // Each subclass names its own type //
    public abstract String getAccountType();
 
