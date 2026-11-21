@@ -1,10 +1,10 @@
 package bank;
 
 import bank.controller.AccountController;
+import bank.controller.CustomerController;
 import bank.controller.InterestController;
 import bank.controller.LoginController;
 import bank.model.Bank;
-import bank.model.IndividualCustomer;
 import bank.view.AccountView;
 import bank.view.DepositView;
 import bank.view.InterestView;
@@ -26,17 +26,18 @@ public class BankApp extends Application {
    @Override
    public void start(Stage stage) {
       Bank bank = new Bank();
-      bank.addCustomer(new IndividualCustomer("Peter", "Muchena", "123456789", new Date(),
-            "Gaborone", "71234567", "peter.muchena@example.com", "12345", true));
-
       LoginController loginController = new LoginController(bank);
-      AccountController accountController = new AccountController(bank);
-      InterestController interestController = new InterestController(bank);
+      CustomerController customerController = new CustomerController(bank);
+      AccountController accountController = new AccountController(bank, loginController);
+      InterestController interestController = new InterestController(bank, accountController);
 
-      OpenAccountView openView = new OpenAccountView(accountController, loginController);
-      DepositView depositView = new DepositView(accountController, loginController);
-      AccountView accountView = new AccountView(accountController, loginController);
-      InterestView interestView = new InterestView(interestController, accountController, loginController);
+      customerController.registerIndividual("Peter", "Muchena", "123456789", new Date(),
+            "Gaborone", "71234567", "peter.muchena@example.com", "12345", true);
+
+      OpenAccountView openView = new OpenAccountView(accountController);
+      DepositView depositView = new DepositView(accountController);
+      AccountView accountView = new AccountView(accountController);
+      InterestView interestView = new InterestView(interestController, accountController);
 
       Tab open = new Tab("Open account", openView.getRoot());
       Tab deposit = new Tab("Deposit / Withdraw", depositView.getRoot());

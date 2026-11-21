@@ -52,7 +52,7 @@ public abstract class Customer {
       return sb.toString();
    }
 
-   // Text used by the GUI. Subclasses OVERRIDE this to add their own fields. //
+   // Text describing the Customer //
    public String getCustomerDetails() {
       return baseDetails() + accountsSummary();
    }

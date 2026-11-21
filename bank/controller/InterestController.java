@@ -1,21 +1,27 @@
 package bank.controller;
+
 import bank.model.Account;
 import bank.model.Bank;
 import bank.model.InterestCalculation;
 
 public class InterestController {
    private final Bank bank;
+   private final AccountController accounts;
 
-   public InterestController(Bank bank) {
+   public InterestController(Bank bank, AccountController accounts) {
       this.bank = bank;
+      this.accounts = accounts;
    }
 
-   public double calculateInterest(Account account) {
-      return asInterest(account).calculateInterest();
+   public String calculateInterest(String accountNumber) {
+      Account account = accounts.findAccount(accountNumber);
+      return String.format("Interest due: BWP %.2f", asInterest(account).calculateInterest());
    }
 
-   public void applyInterest(Account account) {
+   public String applyInterest(String accountNumber) {
+      Account account = accounts.findAccount(accountNumber);
       asInterest(account).applyInterest();
+      return "Interest applied. " + account;
    }
 
    public int applyInterestToAll() {

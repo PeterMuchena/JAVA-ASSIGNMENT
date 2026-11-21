@@ -1,8 +1,6 @@
 package bank.view;
 
 import bank.controller.AccountController;
-import bank.controller.LoginController;
-import bank.model.Account;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -13,15 +11,13 @@ import javafx.scene.layout.VBox;
 
 public class DepositView {
    private final VBox root = new VBox(10);
-   private final ComboBox<Account> accountBox = new ComboBox<>();
+   private final ComboBox<String> accountBox = new ComboBox<>();
    private final TextField amountField = new TextField();
    private final Label message = new Label();
    private final AccountController accounts;
-   private final LoginController login;
 
-   public DepositView(AccountController accounts, LoginController login) {
+   public DepositView(AccountController accounts) {
       this.accounts = accounts;
-      this.login = login;
       amountField.setPromptText("Amount (BWP)");
 
       Button depositButton = new Button("Deposit");
@@ -30,23 +26,17 @@ public class DepositView {
       withdrawButton.setOnAction(e -> run(false));
 
       root.setPadding(new Insets(20));
-      root.getChildren().addAll(new Label("Account"), accountBox, amountField,
+      root.getChildren().addAll(new Label("Account number"), accountBox, amountField,
             new HBox(10, depositButton, withdrawButton), message);
    }
 
    private void run(boolean isDeposit) {
       try {
-         Account a = accountBox.getValue();
-         if (a == null) {
-            throw new IllegalArgumentException("Select an account");
-         }
-         if (isDeposit) {
-            accounts.deposit(a, amountField.getText());
-         } else {
-            accounts.withdraw(a, amountField.getText());
-         }
+         String result = isDeposit
+               ? accounts.deposit(accountBox.getValue(), amountField.getText())
+               : accounts.withdraw(accountBox.getValue(), amountField.getText());
          message.setStyle("-fx-text-fill: #1e8449;");
-         message.setText("Done. " + a);
+         message.setText(result);
          amountField.clear();
       } catch (RuntimeException ex) {
          message.setStyle("-fx-text-fill: #c0392b;");
@@ -55,11 +45,7 @@ public class DepositView {
    }
 
    public void refresh() {
-      if (login.getCurrentCustomer() == null) {
-         accountBox.getItems().clear();
-      } else {
-         accountBox.getItems().setAll(accounts.getAccounts(login.getCurrentCustomer()));
-      }
+      accountBox.getItems().setAll(accounts.getAccountNumbers());
       message.setText("");
    }
 

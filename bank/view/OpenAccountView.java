@@ -1,8 +1,6 @@
 package bank.view;
 
 import bank.controller.AccountController;
-import bank.controller.LoginController;
-import bank.model.Customer;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -19,7 +17,7 @@ public class OpenAccountView {
    private final TextField companyAddressField = new TextField();
    private final Label message = new Label();
 
-   public OpenAccountView(AccountController accounts, LoginController login) {
+   public OpenAccountView(AccountController accounts) {
       typeBox.getItems().addAll("Savings", "Investment", "Cheque");
       typeBox.setValue("Savings");
       branchField.setPromptText("Branch");
@@ -28,33 +26,16 @@ public class OpenAccountView {
       companyAddressField.setPromptText("Employer address");
 
       // only show the employer fields for a cheque account //
-      companyNameField.setVisible(false);
-      companyNameField.setManaged(false);
-      companyAddressField.setVisible(false);
-      companyAddressField.setManaged(false);
-      typeBox.setOnAction(e -> {
-         boolean cheque = "Cheque".equals(typeBox.getValue());
-         companyNameField.setVisible(cheque);
-         companyNameField.setManaged(cheque);
-         companyAddressField.setVisible(cheque);
-         companyAddressField.setManaged(cheque);
-      });
+      setEmployerVisible(false);
+      typeBox.setOnAction(e -> setEmployerVisible("Cheque".equals(typeBox.getValue())));
 
       Button openButton = new Button("Open account");
       openButton.setOnAction(e -> {
          try {
-            Customer c = login.getCurrentCustomer();
-            Object opened;
-            if ("Savings".equals(typeBox.getValue())) {
-               opened = accounts.openSavings(c, branchField.getText(), depositField.getText());
-            } else if ("Investment".equals(typeBox.getValue())) {
-               opened = accounts.openInvestment(c, branchField.getText(), depositField.getText());
-            } else {
-               opened = accounts.openCheque(c, branchField.getText(), depositField.getText(),
-                     companyNameField.getText(), companyAddressField.getText());
-            }
+            String result = accounts.openAccount(typeBox.getValue(), branchField.getText(),
+                  depositField.getText(), companyNameField.getText(), companyAddressField.getText());
             message.setStyle("-fx-text-fill: #1e8449;");
-            message.setText("Opened: " + opened);
+            message.setText(result);
             depositField.clear();
          } catch (RuntimeException ex) {
             message.setStyle("-fx-text-fill: #c0392b;");
@@ -65,6 +46,13 @@ public class OpenAccountView {
       root.setPadding(new Insets(20));
       root.getChildren().addAll(new Label("Account type"), typeBox, branchField, depositField,
             companyNameField, companyAddressField, openButton, message);
+   }
+
+   private void setEmployerVisible(boolean visible) {
+      companyNameField.setVisible(visible);
+      companyNameField.setManaged(visible);
+      companyAddressField.setVisible(visible);
+      companyAddressField.setManaged(visible);
    }
 
    public void refresh() {

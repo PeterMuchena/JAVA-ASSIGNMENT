@@ -71,7 +71,7 @@ public abstract class Account {
    }
 
    // display //
-   // Text used by the GUI. Subclasses OVERRIDE this to add their own details. //
+   // Text Describing the Account //
    public String getAccountDetails() {
       return getAccountType() + " Account"
           + "\nAccount No: " + accountNumber
