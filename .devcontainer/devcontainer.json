@@ -1,0 +1,8 @@
+{
+  "name": "Java banking app",
+  "image": "mcr.microsoft.com/devcontainers/java:25",
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {}
+  },
+  "forwardPorts": [6080]
+}
